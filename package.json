@@ -1,0 +1,16 @@
+{
+  "name": "ai-resume-generator",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+
+    "frontend": "cd frontend && npm start",
+    "backend": "cd backend && npm run dev",
+
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

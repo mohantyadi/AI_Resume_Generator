@@ -1,0 +1,135 @@
+%-------------------------
+% ATS-Friendly Resume (Single Page Optimized)
+% Author: Aditya Mohanty
+%-------------------------
+
+\documentclass[letterpaper,10.5pt]{article}
+
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+\usepackage{tabularx}
+
+\input{glyphtounicode}
+\pdfgentounicode=1
+
+% Remove ugly word breaks
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+
+% Margin tightening
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.6in}
+\addtolength{\textwidth}{1.2in}
+\addtolength{\topmargin}{-0.7in}
+\addtolength{\textheight}{1.4in}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+
+\titleformat{\section}{
+  \vspace{-6pt}\scshape\raggedright\large
+}{}{0em}{}[\vspace{-6pt}\titlerule]
+
+% Custom commands
+\newcommand{\resumeItem}[1]{\item \small{#1}}
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}
+  \textbf{#1} \hfill #2 \\
+  \textit{\small #3} \hfill \textit{\small #4}
+}
+\newcommand{\resumeProject}[2]{
+  \vspace{-2pt}
+  \textbf{#1} \hfill #2
+}
+
+%-------------------------------------------
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+{\LARGE \textbf{Aditya Mohanty}} \\
+9178093798 \quad | \quad mohantyaditya72@gmail.com \quad | \quad
+linkedin.com/in/mohantyaditya \quad | \quad github.com/mohantyadi
+\end{center}
+
+%-----------SUMMARY-----------
+\section*{Summary}
+Full Stack Developer with experience building scalable distributed systems using microservices architecture. Strong foundation in data structures, REST APIs, database optimization, and cloud-based deployments. Interested in backend engineering and AI-driven platforms.
+
+%-----------EDUCATION-----------
+\section*{Education}
+\resumeSubheading
+{Institute of Technical Education and Research -- SOA University}{Bhubaneswar, India}
+{Bachelor of Technology in Computer Science Engineering}{June 2020 -- June 2024}
+
+%-----------TECHNICAL SKILLS-----------
+\section*{Technical Skills}
+\small{
+\textbf{Languages:} JavaScript, TypeScript, Java, SQL, HTML5, CSS3 \\
+\textbf{Backend:} Node.js, Express.js, Spring Boot, RESTful APIs, Microservices Architecture \\
+\textbf{Frontend:} Angular, React.js, Bootstrap \\
+\textbf{Databases:} SQL Server, MySQL, MongoDB \\
+\textbf{Cloud \& DevOps:} AWS, Docker, CI/CD Pipelines \\
+\textbf{Concepts:} Data Structures, Algorithms, Distributed Systems, Networking \\
+\textbf{AI \& Emerging Tech:} API Integration, Prompt Engineering, Agentic AI Basics \\
+\textbf{Tools:} Git, Azure DevOps, Agile/Scrum
+}
+
+%-----------EXPERIENCE-----------
+\section*{Experience}
+
+\resumeSubheading
+{Full Stack Developer}{July 2024 -- August 2025}
+{Innodigital Solutions Pvt. Ltd.}{Hyderabad, India}
+
+\begin{itemize}[leftmargin=0.18in, itemsep=1pt, topsep=2pt]
+\resumeItem{Developed scalable backend services using microservices architecture.}
+\resumeItem{Designed RESTful APIs and optimized SQL Server and MongoDB queries.}
+\resumeItem{Deployed applications using Docker and cloud platforms ensuring high availability.}
+\resumeItem{Collaborated in Agile teams using Git and CI/CD pipelines.}
+\end{itemize}
+
+\resumeSubheading
+{Web Development Intern}{March 2024 -- April 2024}
+{Bharat Intern}{Remote}
+
+\begin{itemize}[leftmargin=0.18in, itemsep=1pt, topsep=2pt]
+\resumeItem{Built responsive web applications and integrated backend APIs.}
+\resumeItem{Performed debugging and testing to improve reliability.}
+\end{itemize}
+
+%-----------PROJECTS-----------
+\section*{Projects}
+
+\resumeProject
+{TrailSync -- Activity Tracking Platform | Angular, Node.js, MongoDB}{2025}
+\begin{itemize}[leftmargin=0.18in, itemsep=1pt, topsep=2pt]
+\resumeItem{Built distributed backend services for handling user activity data.}
+\resumeItem{Optimized database queries for scalable performance.}
+\end{itemize}
+
+\resumeProject
+{AI Travel Itinerary Planner | Angular, Node.js, OpenAI API}{2025}
+\begin{itemize}[leftmargin=0.18in, itemsep=1pt, topsep=2pt]
+\resumeItem{Integrated AI APIs for intelligent travel recommendations.}
+\resumeItem{Designed scalable backend workflows for dynamic user inputs.}
+\end{itemize}
+
+\resumeProject
+{Personal Finance Manager | MEAN Stack, AWS}{2024}
+\begin{itemize}[leftmargin=0.18in, itemsep=1pt, topsep=2pt]
+\resumeItem{Implemented JWT authentication and role-based access control.}
+\resumeItem{Automated deployment using Docker and CI/CD pipelines.}
+\end{itemize}
+
+%-----------CERTIFICATIONS-----------
+\section*{Certifications}
+\small{
+Foundations of Cybersecurity -- Coursera \\
+Web Development Fundamentals -- Udemy
+}
+
+\end{document}

@@ -1,0 +1,378 @@
+<!-- APP SHELL -->
+<div class="app-shell">
+
+  <!-- ===== HEADER ===== -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-mark">
+          <span class="logo-icon">◈</span>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">ResumeAI</span>
+          <span class="logo-tag">LaTeX PDF Generator</span>
+        </div>
+      </div>
+      <div class="header-status">
+        <span class="status-dot" [class.online]="backendOnline" [class.offline]="!backendOnline"></span>
+        <span class="status-label">{{ backendOnline ? 'API Online' : 'API Offline' }}</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main">
+
+    <!-- FORM STEP -->
+    <div class="step-form" *ngIf="step() === 'form'" [@.disabled]="true">
+
+      <div class="page-hero">
+        <div class="hero-badge">Powered by GPT-4o + LaTeX</div>
+        <h1 class="hero-title">
+          Craft Your <em>Perfect</em><br>Application
+        </h1>
+        <p class="hero-sub">
+          Paste a job description. Our AI generates tailored resume sections and a cover letter,
+          then compiles them into professional LaTeX PDFs — ready to send.
+        </p>
+      </div>
+
+      <!-- Error Banner -->
+      <div class="error-banner" *ngIf="error">
+        <span class="error-icon">⚠</span>
+        <span class="error-text">{{ error }}</span>
+        <button class="error-close" (click)="error = null">✕</button>
+      </div>
+
+      <!-- Form Card -->
+      <div class="form-card">
+
+        <div class="form-grid">
+
+          <!-- Job Description -->
+          <div class="field-group full-width">
+            <label class="field-label" for="jobDesc">
+              <span class="label-text">Job Description</span>
+              <span class="label-required">Required</span>
+              <span class="char-count" [class.warn]="charCount > 3000">{{ charCount }}</span>
+            </label>
+            <div class="textarea-wrapper">
+              <textarea
+                id="jobDesc"
+                class="field-textarea"
+                [(ngModel)]="jobDescription"
+                placeholder="Paste the full job description here...&#10;&#10;Include responsibilities, requirements, and qualifications for best AI results."
+                rows="10"
+                maxlength="6000"
+              ></textarea>
+              <div class="textarea-corner"></div>
+            </div>
+            <p class="field-hint">
+              Tip: Include the full posting for best AI tailoring — requirements, responsibilities, company culture.
+            </p>
+          </div>
+
+          <!-- Company Name -->
+          <div class="field-group">
+            <label class="field-label" for="company">
+              <span class="label-text">Company Name</span>
+              <span class="label-required">Required</span>
+            </label>
+            <div class="input-wrapper">
+              <span class="input-icon">🏢</span>
+              <input
+                id="company"
+                class="field-input"
+                type="text"
+                [(ngModel)]="companyName"
+                placeholder="e.g. Google, Stripe, OpenAI"
+                maxlength="100"
+              />
+            </div>
+          </div>
+
+          <!-- Role -->
+          <div class="field-group">
+            <label class="field-label" for="role">
+              <span class="label-text">Role / Job Title</span>
+              <span class="label-optional">Optional</span>
+            </label>
+            <div class="input-wrapper">
+              <span class="input-icon">💼</span>
+              <input
+                id="role"
+                class="field-input"
+                type="text"
+                [(ngModel)]="role"
+                placeholder="e.g. Senior Software Engineer"
+                maxlength="100"
+              />
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Submit -->
+        <div class="form-footer">
+          <div class="form-info">
+            <div class="info-item">
+              <span class="info-icon">🤖</span>
+              <span>GPT-4o analyzes your JD</span>
+            </div>
+            <div class="info-item">
+              <span class="info-icon">📄</span>
+              <span>LaTeX PDF generation</span>
+            </div>
+            <div class="info-item">
+              <span class="info-icon">⚡</span>
+              <span>~15 seconds</span>
+            </div>
+          </div>
+          <button
+            class="btn-generate"
+            [disabled]="!isFormValid"
+            (click)="onGenerate()"
+          >
+            <span class="btn-icon">✦</span>
+            <span class="btn-text">Generate Documents</span>
+            <span class="btn-arrow">→</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Feature Cards -->
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">🧠</div>
+          <h3>AI-Tailored Content</h3>
+          <p>GPT-4o reads the job posting and writes a summary, skills list, and project highlights matched to the role.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📐</div>
+          <h3>Professional LaTeX</h3>
+          <p>Your content fills beautifully typeset LaTeX templates and compiles to pixel-perfect PDFs via latexmk.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💌</div>
+          <h3>Cover Letter</h3>
+          <p>A personalized cover letter body addressing the specific company and role, ready to customize and send.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LOADING STEP -->
+    <div class="step-loading" *ngIf="step() === 'loading'">
+      <div class="loading-card">
+        <div class="loading-orb">
+          <div class="orb-ring orb-ring-1"></div>
+          <div class="orb-ring orb-ring-2"></div>
+          <div class="orb-ring orb-ring-3"></div>
+          <div class="orb-core">
+            <span class="orb-icon">{{ currentLoading.icon }}</span>
+          </div>
+        </div>
+
+        <div class="loading-content">
+          <h2 class="loading-title">Crafting Your Application</h2>
+          <p class="loading-message">{{ currentLoading.text }}</p>
+
+          <div class="progress-track">
+            <div class="progress-bar" [style.width.%]="loadingProgress"></div>
+          </div>
+          <div class="progress-label">{{ loadingProgress | number:'1.0-0' }}%</div>
+
+          <div class="loading-steps">
+            <div
+              class="loading-step"
+              *ngFor="let msg of loadingMessages; let i = index"
+              [class.active]="i === currentLoadingIndex"
+              [class.done]="i < currentLoadingIndex"
+            >
+              <span class="step-dot"></span>
+              <span class="step-text">{{ msg.text }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="loading-for">
+          <span>Generating for</span>
+          <strong>{{ companyName }}</strong>
+          <span *ngIf="role">· {{ role }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULT STEP -->
+    <div class="step-result" *ngIf="step() === 'result' && result">
+
+      <div class="result-header">
+        <div class="result-badge success">✓ Documents Generated</div>
+        <h2 class="result-title">Your Application is Ready</h2>
+        <p class="result-sub">
+          AI-tailored content for <strong>{{ companyName }}</strong>
+          <span *ngIf="role"> · {{ role }}</span>
+        </p>
+      </div>
+
+      <!-- Download Cards -->
+      <div class="download-row">
+
+        <div class="download-card" [class.available]="result.files.resumePdf">
+          <div class="download-icon">📄</div>
+          <div class="download-info">
+            <h3>Resume</h3>
+            <p>{{ result.files.resumePdf ? 'PDF compiled successfully' : 'LaTeX source available' }}</p>
+          </div>
+          <div class="download-actions">
+            <button
+              class="btn-download primary"
+              *ngIf="result.files.resumePdf"
+              (click)="openFile(result.files.resumePdf)"
+            >
+              ↓ Download PDF
+            </button>
+            <button
+              class="btn-download secondary"
+              (click)="openFile(result.files.resumeTex)"
+            >
+              ↓ .tex Source
+            </button>
+          </div>
+        </div>
+
+        <div class="download-card" [class.available]="result.files.coverPdf">
+          <div class="download-icon">💌</div>
+          <div class="download-info">
+            <h3>Cover Letter</h3>
+            <p>{{ result.files.coverPdf ? 'PDF compiled successfully' : 'LaTeX source available' }}</p>
+          </div>
+          <div class="download-actions">
+            <button
+              class="btn-download primary"
+              *ngIf="result.files.coverPdf"
+              (click)="openFile(result.files.coverPdf)"
+            >
+              ↓ Download PDF
+            </button>
+            <button
+              class="btn-download secondary"
+              (click)="openFile(result.files.coverTex)"
+            >
+              ↓ .tex Source
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Warning (no LaTeX) -->
+      <div class="warning-banner" *ngIf="result.warning && !result.pdfGenerated">
+        <span class="warning-icon">⚠</span>
+        <div>
+          <strong>PDF Compilation Unavailable</strong>
+          <p>LaTeX isn't installed on this machine. Download the .tex source files and compile locally using <code>latexmk -pdf resume.tex</code></p>
+          <p class="warning-install">Install: <code>sudo apt-get install texlive-full</code> (Ubuntu) or <code>brew install --cask mactex</code> (Mac)</p>
+        </div>
+      </div>
+
+      <!-- AI Content Tabs -->
+      <div class="content-section">
+        <div class="section-header">
+          <h3>AI-Generated Content</h3>
+          <p>Review and customize before using</p>
+        </div>
+
+        <div class="tabs">
+          <button class="tab" [class.active]="activeTab === 'summary'" (click)="activeTab = 'summary'">
+            Summary
+          </button>
+          <button class="tab" [class.active]="activeTab === 'skills'" (click)="activeTab = 'skills'">
+            Skills
+          </button>
+          <button class="tab" [class.active]="activeTab === 'projects'" (click)="activeTab = 'projects'">
+            Projects
+          </button>
+          <button class="tab" [class.active]="activeTab === 'cover'" (click)="activeTab = 'cover'">
+            Cover Letter
+          </button>
+        </div>
+
+        <div class="tab-content">
+
+          <div class="content-block" *ngIf="activeTab === 'summary'">
+            <div class="content-label">
+              <span>Professional Summary</span>
+              <button class="btn-copy" (click)="copyText(result.aiContent.summary)">
+                Copy ⧉
+              </button>
+            </div>
+            <div class="content-text">{{ result.aiContent.summary }}</div>
+          </div>
+
+          <div class="content-block" *ngIf="activeTab === 'skills'">
+            <div class="content-label">
+              <span>Technical Skills</span>
+              <button class="btn-copy" (click)="copyText(result.aiContent.skills)">
+                Copy ⧉
+              </button>
+            </div>
+            <div class="skills-chips">
+              <span class="skill-chip" *ngFor="let skill of result.aiContent.skills.split(',')">
+                {{ skill.trim() }}
+              </span>
+            </div>
+            <div class="content-text mono">{{ result.aiContent.skills }}</div>
+          </div>
+
+          <div class="content-block" *ngIf="activeTab === 'projects'">
+            <div class="content-label">
+              <span>Key Projects</span>
+              <button class="btn-copy" (click)="copyText(result.aiContent.projects)">
+                Copy ⧉
+              </button>
+            </div>
+            <div class="content-text">{{ result.aiContent.projects }}</div>
+          </div>
+
+          <div class="content-block" *ngIf="activeTab === 'cover'">
+            <div class="content-label">
+              <span>Cover Letter Body</span>
+              <button class="btn-copy" (click)="copyText(result.aiContent.coverLetter)">
+                Copy ⧉
+              </button>
+            </div>
+            <div class="content-text">{{ result.aiContent.coverLetter }}</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Output path info -->
+      <div class="output-info">
+        <span class="output-icon">📁</span>
+        <code>backend/{{ result.outputDir }}</code>
+      </div>
+
+      <!-- Actions -->
+      <div class="result-actions">
+        <button class="btn-new" (click)="onReset()">
+          ← Generate for Another Role
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>Built with Angular + Node.js + GPT-4o + LaTeX</span>
+      <span class="footer-sep">·</span>
+      <span>Outputs saved to <code>backend/outputs/</code></span>
+    </div>
+  </footer>
+
+</div>
