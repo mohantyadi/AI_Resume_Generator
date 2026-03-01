@@ -1,22 +1,27 @@
 # Node
 node_modules/
-npm-debug.log
 package-lock.json
+
+# Angular
+frontend/.angular/
+frontend/dist/
+frontend/node_modules/
+
+# Backend
+backend/node_modules/
+backend/outputs/
 
 # Environment
 .env
 
-# Build
-dist/
-build/
-
-# Outputs
-backend/outputs/
-*.pdf
+# Logs
 *.log
-*.aux
-*.out
 
 # OS
 .DS_Store
 Thumbs.db
+
+# LaTeX
+*.aux
+*.out
+*.pdf
